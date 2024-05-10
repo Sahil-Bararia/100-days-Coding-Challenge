@@ -1,0 +1,46 @@
+/* Runtime : 20ms
+Beats 5.34% of users with Java */
+
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int i,j,temp=0,pos,b;
+        double median;
+
+       int m = nums1.length;
+       int n = nums2.length;
+       int []arr=new int[m+n];
+       pos=0;
+       for(int element:nums1)
+       {
+        arr[pos]=element;
+        pos++;
+       }
+       for(int element2:nums2)
+       {
+        arr[pos]=element2;
+        pos++;
+       }
+       for(i=0;i<arr.length;i++)
+       {
+        for(j=i+1;j<arr.length;j++)
+        {
+            if(arr[j]<arr[i])
+            {
+                temp=arr[j];
+                arr[j]=arr[i];
+                arr[i]=temp;
+            }
+        }
+       }
+       b=arr.length;
+       if(b%2==0)
+       {
+        median=(arr[b/2]+arr[b/2-1])/2.0;
+       }
+       else
+       {
+        median=(arr[(b-1)/2]);
+       }
+       return median;
+    }
+}
