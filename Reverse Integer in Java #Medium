@@ -1,0 +1,32 @@
+/*Runtime : 1ms
+Beats 82.27% of users with Java*/
+
+class Solution {
+    public int reverse(int x) {
+        int rev = 0;
+        int digits;
+
+        if (x < 0) { // If input is negative
+            x = x * -1; // Make x positive for processing
+            while (x != 0) {
+                digits = x % 10;
+                if (rev > (Integer.MAX_VALUE - digits) / 10) {
+                    return 0; // Return 0 if overflow occurs
+                }
+                rev = rev * 10 + digits;
+                x = x / 10;
+            }
+            return rev * -1; // Multiply by -1 to make it negative again
+        } else { // If input is positive
+            while (x != 0) {
+                digits = x % 10;
+                if (rev > (Integer.MAX_VALUE - digits) / 10) {
+                    return 0; // Return 0 if overflow occurs
+                }
+                rev = rev * 10 + digits;
+                x = x / 10;
+            }
+            return rev; // Return the reversed positive number
+        }
+    }
+}
