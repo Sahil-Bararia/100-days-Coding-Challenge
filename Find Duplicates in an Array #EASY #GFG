@@ -1,0 +1,29 @@
+// Runtime : 3.14 sec
+
+class Solution {
+    public static ArrayList<Integer> duplicates(int arr[], int n) {
+          ArrayList<Integer> duplicatesList = new ArrayList<>();
+        int i;
+        Arrays.sort(arr);
+        for(i=0;i<n-1;i++)
+        {
+            if(arr[i]==arr[i+1])
+            {
+                duplicatesList.add(arr[i]);
+                
+            }
+            while(i<n-1 && arr[i]==arr[i+1]) //// Move to the next unique element to avoid duplicates
+            {
+                i++;
+            }
+    
+         }
+        if(duplicatesList.isEmpty())
+        {
+            duplicatesList.add(-1);
+            
+        }
+        return duplicatesList;
+        
+    }
+}
