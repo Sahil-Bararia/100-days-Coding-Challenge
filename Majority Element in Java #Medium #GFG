@@ -1,0 +1,30 @@
+class Solution
+{
+    static int majorityElement(int a[], int size)
+    {
+        int i;
+        Map<Integer,Integer> mp=new HashMap<>();
+        for(i=0;i<a.length;i++)
+        {
+            if(mp.containsKey(a[i]))
+            {
+                mp.put(a[i],mp.get(a[i])+1);
+            }
+            else
+            {
+                mp.put(a[i],1);
+            }
+            
+        }
+           for (Integer n : mp.keySet()) 
+           {
+            if(mp.get(n)>size/2)
+            {
+                return n;
+            }
+           }
+         
+        return -1;
+    }
+    
+}
