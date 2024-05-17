@@ -1,0 +1,8 @@
+class Solution {
+    public int findPeakElement(List<Integer> a) {
+        int n;
+        Collections.sort(a);
+        n=a.size()-1;
+        return a.get(n);
+    }
+}
