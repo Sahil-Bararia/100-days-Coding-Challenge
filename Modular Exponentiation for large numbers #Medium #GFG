@@ -1,0 +1,61 @@
+=============================================================================================
+1 ≤ x, n, M ≤ 10^9 Optimal Code
+=============================================================================================
+class Solution
+{
+    public long PowMod(long x, long n, long m)
+    {
+        long result = 1;
+        x = x % m;  // Take modulo m to handle cases where x >= m
+
+        while (n > 0)
+        {
+            // If n is odd, multiply x with the result
+            if ((n & 1) == 1)
+            {
+                result = (result * x) % m;
+            }
+
+            // n must be even now
+            n = n >> 1;  // Divide n by 2
+            x = (x * x) % m;  // Change x to x^2
+        }
+
+        return result;
+    }
+}
+=================================================================================================
+For small values of x,n,m. not optimal
+==================================================================================================
+class Solution
+{
+    public long PowMod(long x, long n, long m)
+    {
+        int i;
+        long result,k=0;
+        if(n==0)
+        {
+            return 1;
+        }
+        if(n%2==0)
+        {
+            result=(long)Math.pow(x,n/2)*(long)Math.pow(x,n/2);
+        }
+        else
+        {
+            result=(long)Math.pow(x,n/2)*(long)Math.pow(x,n/2)*x;
+        }
+        
+        if(m>result)
+        {
+            return result;
+        }
+        else if(m<result)
+        {
+             k = result % m;
+             return k;
+        }
+        return 0;
+    }
+}
+==============================================================================================================
