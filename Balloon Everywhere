@@ -1,0 +1,63 @@
+//{ Driver Code Starts
+// Initial Template for Java
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+// Position this line where user code will be pasted.
+
+class GFG {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br =
+            new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out=new PrintWriter(System.out);
+        int T = Integer.parseInt(br.readLine().trim());
+        while (T-- > 0) {
+            String s = br.readLine().trim();
+            Solution ob = new Solution();
+            int ans = ob.maxInstance(s);
+            out.println(ans);
+        }
+        out.close();
+    }
+}
+// } Driver Code Ends
+==============================================================================================
+class Solution {
+    public int maxInstance(String s) {
+        if (s.length() < 7) {
+            return 0;
+        }
+
+        HashMap<Character, Integer> mp = new HashMap<>();
+        char[] arr = s.toCharArray();
+
+        // Populate the HashMap with character counts for the relevant characters
+        for (char c : arr) {
+            if (c == 'b' || c == 'a' || c == 'l' || c == 'o' || c == 'n') {
+                mp.put(c, mp.getOrDefault(c, 0) + 1);
+            }
+        }
+
+        // Check if all required characters are present
+        if (!mp.containsKey('b') || 
+            !mp.containsKey('a') || 
+            !mp.containsKey('l') || 
+            !mp.containsKey('o') || 
+            !mp.containsKey('n')) {
+            return 0;
+        }
+
+        // Calculate the counts for 'b', 'a', 'l', 'o', and 'n'
+        int bCount = mp.get('b');
+        int aCount = mp.get('a');
+        int lCount = mp.get('l') / 2;  // 'l' appears twice in "balloon"
+        int oCount = mp.get('o') / 2;  // 'o' appears twice in "balloon"
+        int nCount = mp.get('n');
+
+        // Determine the minimum count among these to find the limiting factor
+        return Math.min(bCount, Math.min(aCount, Math.min(lCount, Math.min(oCount, nCount))));
+    }
+}
+======================================================================================================
