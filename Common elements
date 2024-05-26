@@ -1,0 +1,110 @@
+//{ Driver Code Starts
+//Initial Template for Java
+
+import java.util.*;
+
+public class GFG
+{
+    public static void main(String args[]) 
+    {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) 
+        {
+            int n1 = sc.nextInt();
+            int n2 = sc.nextInt();
+            int n3 = sc.nextInt();
+            
+            int A[] = new int[n1];
+            int B[] = new int[n2];
+            int C[] = new int[n3];
+            
+            for (int i = 0;i < n1;i++)
+            {
+                A[i] = sc.nextInt();
+            }
+            for (int i = 0;i < n2;i++)
+            {
+                B[i] = sc.nextInt();
+            }
+            for (int i = 0;i < n3;i++)
+            {
+                C[i] = sc.nextInt();
+            }
+            
+            Solution sol = new Solution();
+            ArrayList<Integer> res = sol.commonElements(A, B, C, n1, n2, n3);
+            if (res.size() == 0)
+            {
+                System.out.print(-1);
+            }
+            else 
+            {
+                for (int i = 0;i < res.size();i++)
+                {
+                    System.out.print(res.get(i) + " ");
+                }    
+            }
+            System.out.println();
+        }
+    }
+}
+
+
+// } Driver Code Ends
+
+
+class Solution {
+    ArrayList<Integer> commonElements(int A[], int B[], int C[], int n1, int n2, int n3) {
+        Map<Integer, Integer> countMap = new HashMap<>();
+        ArrayList<Integer> result = new ArrayList<>();
+        
+        // Use sets to handle duplicates within the same array
+        HashSet<Integer> setA = new HashSet<>();
+        HashSet<Integer> setB = new HashSet<>();
+        HashSet<Integer> setC = new HashSet<>();
+        
+        // Fill setA with elements from A
+        for (int i : A) {
+            setA.add(i);
+        }
+        
+        // Fill setB with elements from B
+        for (int i : B) {
+            setB.add(i);
+        }
+        
+        // Fill setC with elements from C
+        for (int i : C) {
+            setC.add(i);
+        }
+        
+        // Increment counts for elements in setA
+        for (int i : setA) {
+            countMap.put(i, 1);
+        }
+        
+        // Increment counts for elements in setB
+        for (int i : setB) {
+            if (countMap.containsKey(i)) {
+                countMap.put(i, 2);
+            }
+        }
+        
+        // Increment counts for elements in setC
+        for (int i : setC) {
+            if (countMap.containsKey(i) && countMap.get(i) == 2) {
+                countMap.put(i, 3);
+            }
+        }
+        
+        // Collect elements that are present in all three sets
+        for (Map.Entry<Integer, Integer> entry : countMap.entrySet()) {
+            if (entry.getValue() == 3) {
+                result.add(entry.getKey());
+            }
+        }
+        Collections.sort(result);
+        return result;
+    }
+}
