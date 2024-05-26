@@ -1,0 +1,66 @@
+Using Two Pointer
+=======================================================================
+
+class Solution {
+    // Function to find if there exists a triplet in the array A[] which sums up to X.
+    public static boolean find3Numbers(int A[], int n, int X) {
+        // Sort the array
+        Arrays.sort(A);
+        
+        // Fix the first element one by one and find the other two elements
+        for (int i = 0; i < n - 2; i++) {
+            // Initialize two pointers
+            int left = i + 1;
+            int right = n - 1;
+            
+            // Use two pointers to find a pair in the sorted array that sums to X - A[i]
+            while (left < right) {
+                int currentSum = A[i] + A[left] + A[right];
+                if (currentSum == X) {
+                    return true;
+                } else if (currentSum < X) {
+                    left++;
+                } else { // currentSum > X
+                    right--;
+                }
+            }
+        }
+        
+        // If we reach here, then no triplet was found
+        return false;
+    }
+}
+===============================================================================================
+Using Hashset
+==============================================================================================
+
+
+//User function Template for Java
+
+
+
+class Solution {
+    // Function to find if there exists a triplet in the array A[] which sums up to X.
+    public static boolean find3Numbers(int A[], int n, int X) { 
+        // Iterate through the array to fix the first element of the triplet
+        for (int i = 0; i < n - 2; i++) {
+            // Create a HashSet to store elements seen so far in the current triplet search
+            HashSet<Integer> seen = new HashSet<>();
+            // Calculate the required sum for the remaining two elements
+            int currentSum = X - A[i];
+            
+            // Iterate through the array from the next element to the end
+            for (int j = i + 1; j < n; j++) {
+                // If the difference between the currentSum and the current element is in the HashSet,
+                // we found the triplet
+                if (seen.contains(currentSum - A[j])) {
+                    return true;
+                }
+                // Add the current element to the HashSet
+                seen.add(A[j]);
+            }
+        }
+        // If no triplet is found, return false
+        return false;
+    }
+}
