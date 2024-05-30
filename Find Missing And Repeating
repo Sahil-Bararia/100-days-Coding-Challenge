@@ -1,0 +1,58 @@
+===============================================================================
+Time Complexity Exceeded
+===============================================================================
+class Solve {
+    int[] findTwoElement(int arr[], int n) {
+        HashMap<Integer, Integer> mp = new HashMap<>();
+        int[] result = new int[2]; // result[0] will be the repeating element, result[1] will be the missing element
+
+        // Count the frequency of each element
+        for (int i : arr) {
+            mp.put(i, mp.getOrDefault(i, 0) + 1);
+        }
+
+        // Find the repeating and the missing element
+        for (int i = 1; i <= n; i++) {
+            if (mp.containsKey(i)) {
+                if (mp.get(i)> 1) {
+                    result[0] = i; // repeating element
+                }
+            } else {
+                result[1] = i; // missing element
+            }
+        }
+
+        return result;
+    }
+}
+=======================================================================================
+MOre Optimised
+=======================================================================================
+class Solve {
+    int[] findTwoElement(int arr[], int n) {
+        int repeating = -1;
+        int missing = -1;
+
+        // Step 1: Mark visited elements by negating the value at the index corresponding to each element's value
+        for (int i = 0; i < n; i++) {
+            int absValue = Math.abs(arr[i]);
+            if (arr[absValue - 1] < 0) {
+                repeating = absValue;
+            } else {
+                arr[absValue - 1] = -arr[absValue - 1];
+            }
+        }
+
+        // Step 2: Find the missing element
+        for (int i = 0; i < n; i++) {
+            if (arr[i] > 0) {
+                missing = i + 1;
+                break;
+            }
+        }
+
+        return new int[]{repeating, missing};
+    }
+
+}
+
