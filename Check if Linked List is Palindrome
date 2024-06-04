@@ -1,0 +1,228 @@
+=====================================================================================
+Space --> O(N)
+Time ---> O(N)
+====================================================================================
+
+
+//{ Driver Code Starts
+import java.util.*;
+
+class Node
+{
+	int data;
+	Node next;
+	
+	Node(int d)
+	{
+		data = d;
+		next = null;
+	}
+}
+
+class Is_LinkedList_Palindrom
+{
+	 Node head;  
+	 Node tail;
+	
+	/* Function to print linked list */
+    void printList(Node head)
+    {
+        Node temp = head;
+        while (temp != null)
+        {
+           System.out.print(temp.data+" ");
+           temp = temp.next;
+        }  
+        System.out.println();
+    }
+	
+ 
+    /* Inserts a new Node at front of the list. */
+    public void addToTheLast(Node node) 
+	{
+
+		if (head == null) 
+		{
+			head = node;
+			tail = node;
+		} else 
+		{
+		    tail.next = node;
+		    tail = node;
+		}
+    }
+	
+	public static void main(String args[])
+	{
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		 
+		while(t>0)
+        {
+			int n = sc.nextInt();
+			//int k = sc.nextInt();
+			Is_LinkedList_Palindrom llist = new Is_LinkedList_Palindrom();
+			//int n=Integer.parseInt(br.readLine());
+			int a1=sc.nextInt();
+			Node head= new Node(a1);
+            Node tail = head;
+            for (int i = 1; i < n; i++) 
+			{
+				int a = sc.nextInt(); 
+			    tail.next = new Node(a);
+			    tail = tail.next;
+			}
+			
+			Solution g = new Solution();
+			if(g.isPalindrome(head) == true)
+			    System.out.println(1);
+		    else
+			    System.out.println(0);
+			t--;
+		}
+		
+	}
+}
+
+
+
+
+// } Driver Code Ends
+
+
+/* Structure of class Node is
+class Node
+{
+	int data;
+	Node next;
+	
+	Node(int d)
+	{
+		data = d;
+		next = null;
+	}
+}*/
+
+class Solution {
+    public Node reverse(Node head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        Node rev = reverse(head.next);
+        head.next.next = head;
+        head.next = null;
+        return rev;
+    }
+    
+    boolean isPalindrome(Node head) {
+        String s = "";
+        String s2 = "";
+        Node temp = head;
+        
+        // Build the string representation of the original linked list
+        while (temp != null) {
+            s += temp.data;
+            temp = temp.next;
+        }
+        
+        // Reverse the linked list
+        head = reverse(head);
+        temp = head;  // Reset temp to the head of the reversed list
+        
+        // Build the string representation of the reversed linked list
+        while (temp != null) {
+            s2 += temp.data;
+            temp = temp.next;
+        }
+        
+        // Compare the two string representations
+        return s.equals(s2);
+    }
+}
+=====================================================================================
+Space --> O(1)
+Time ---> O(N)
+====================================================================================
+
+class Solution {
+    // Helper method to reverse a linked list
+    private Node reverse(Node head) {
+        Node prev = null;
+        Node curr = head;
+        while (curr != null) {
+            Node next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
+
+    // Helper method to find the middle of the linked list
+    private Node findMiddle(Node head) {
+        Node slow = head;
+        Node fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+    public boolean isPalindrome(Node head) {
+        if (head == null || head.next == null) {
+            return true;
+        }
+
+        // Find the middle of the linked list
+        Node mid = findMiddle(head);
+
+        // Reverse the second half of the linked list
+        Node secondHalf = reverse(mid);
+        Node secondHalfCopy = secondHalf; // To restore later
+
+        // Compare the first and second half nodes
+        Node firstHalf = head;
+        boolean isPalindrome = true;
+        while (secondHalf != null) {
+            if (firstHalf.data != secondHalf.data) {
+                isPalindrome = false;
+                break;
+            }
+            firstHalf = firstHalf.next;
+            secondHalf = secondHalf.next;
+        }
+
+        // Restore the second half of the linked list (optional)
+        reverse(secondHalfCopy);
+
+        return isPalindrome;
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+
+        // Create a test linked list: 1 -> 2 -> 2 -> 1
+        Node head = new Node(1);
+        head.next = new Node(2);
+        head.next.next = new Node(2);
+        head.next.next.next = new Node(1);
+
+        boolean result = solution.isPalindrome(head);
+        System.out.println("Is palindrome: " + result);  // Output: Is palindrome: true
+    }
+}
+
+// Node class for linked list
+class Node {
+    int data;
+    Node next;
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+
+
+
