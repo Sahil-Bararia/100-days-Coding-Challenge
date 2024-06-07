@@ -1,0 +1,62 @@
+
+//{ Driver Code Starts
+//Initial Template for Java
+
+import java.io.*;
+import java.util.*;
+
+class GFG {
+    public static void main (String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(br.readLine().trim()); //Inputting the testcases
+        while(t-->0){
+            String S = br.readLine();
+            Solution ob = new Solution();
+            String ans = ob.rremove(S).trim();
+            System.out.println(ans);
+        }
+    }
+}
+// } Driver Code Ends
+
+
+//User function Template for Java
+
+class Solution {
+    String rremove(String s) {
+        if (s.isEmpty()) return s;
+        return checkDuplicates(s);
+    }
+    
+    String checkDuplicates(String s) {
+        char[] arr = s.toCharArray();
+        int len = arr.length;
+        boolean hasDuplicates = false;
+        
+        // Using StringBuilder for efficient string manipulation
+        StringBuilder sb = new StringBuilder();
+        
+        // Traverse the array and skip adjacent duplicates
+        for (int i = 0; i < len; i++) {
+            if (i < len - 1 && arr[i] == arr[i + 1]) {
+                // Skip all adjacent duplicates
+                hasDuplicates = true;
+                while (i < len - 1 && arr[i] == arr[i + 1]) {
+                    i++;
+                }
+            } else {
+                sb.append(arr[i]);
+            }
+        }
+        
+        // Convert the StringBuilder back to a string
+        String result = sb.toString();
+        
+        // If we removed some duplicates, we need to check the new string again
+        if (hasDuplicates) {
+            return checkDuplicates(result);
+        } else {
+            return result;
+        }
+    }
+}
