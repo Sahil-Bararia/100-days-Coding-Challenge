@@ -1,0 +1,80 @@
+//{ Driver Code Starts
+// Initial Template for Java
+
+import java.io.*;
+import java.util.*;
+class GFG {
+    public static void main(String args[]) throws IOException {
+        BufferedReader read =
+            new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(read.readLine());
+        while (t-- > 0) {
+            int N, M, x, y;
+            String S[] = read.readLine().split(" ");
+            N = Integer.parseInt(S[0]);
+            M = Integer.parseInt(S[1]);
+            int a[][] = new int[N][M];
+            for (int i = 0; i < N; i++) {
+                String s[] = read.readLine().split(" ");
+                for (int j = 0; j < M; j++) a[i][j] = Integer.parseInt(s[j]);
+            }
+            String s1[] = read.readLine().split(" ");
+            x = Integer.parseInt(s1[0]);
+            y = Integer.parseInt(s1[1]);
+            Solution ob = new Solution();
+            System.out.println(ob.shortestDistance(N, M, a, x, y));
+        }
+    }
+}
+// } Driver Code Ends
+
+
+class Pair {
+    int first, second, dist;
+    public Pair(int first, int second, int dist) {
+        this.first = first;
+        this.second = second;
+        this.dist = dist;
+    }
+}
+
+class Solution {
+    int shortestDistance(int N, int M, int A[][], int X, int Y) {
+        // Check if the starting or ending cell is blocked, use || (or) instead of &&
+        if (A[0][0] == 0 || A[X][Y] == 0) return -1;
+
+        boolean vis[][] = new boolean[N][M];
+        Queue<Pair> pq = new LinkedList<>();
+        pq.add(new Pair(0, 0, 0));
+        vis[0][0] = true;
+
+        int row = A.length;
+        int col = A[0].length;
+
+        // Direction vectors for moving in 4 possible directions (up, right, down, left)
+        int delrow[] = {-1, 0, 1, 0};
+        int delcol[] = {0, 1, 0, -1};
+
+        while (!pq.isEmpty()) {
+            Pair temp = pq.poll(); 
+            int ro = temp.first;
+            int co = temp.second;
+            int dist = temp.dist;
+
+            
+            if (ro == X && co == Y) return dist;
+
+            for (int i = 0; i < 4; i++) {
+                int nrow = ro + delrow[i];
+                int ncol = co + delcol[i];
+                
+               
+                if (nrow >= 0 && nrow < row && ncol >= 0 && ncol < col && A[nrow][ncol] == 1 && !vis[nrow][ncol]) {
+                    vis[nrow][ncol] = true;
+                    pq.add(new Pair(nrow, ncol, dist + 1));
+                }
+            }
+        }
+        return -1;
+    }
+}
