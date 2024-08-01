@@ -1,0 +1,26 @@
+import java.util.HashMap;
+
+class Solution {
+    static int findSubArraySum(int Arr[], int N, int k) {
+        int count = 0;
+        int currsum = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        // Initialize the HashMap with the base case (sum 0 occurs once)
+        map.put(0, 1);
+
+        for (int i = 0; i < N; i++) {
+            currsum += Arr[i];
+
+            // Check if there is a subarray (ending at index i) with sum equals to (currsum - k)
+            if (map.containsKey(currsum - k)) {
+                count += map.get(currsum - k);
+            }
+
+            // Update the frequency of the current cumulative sum in the map
+            map.put(currsum, map.getOrDefault(currsum, 0) + 1);
+        }
+
+        return count;
+    }
+}
