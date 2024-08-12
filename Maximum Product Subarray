@@ -1,0 +1,87 @@
+//{ Driver Code Starts
+import java.io.*;
+import java.util.*;
+
+  public class Main {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br =
+            new BufferedReader(new InputStreamReader(System.in));
+        int tc = Integer.parseInt(br.readLine());
+        while (tc-- > 0) {
+            int n = Integer.parseInt(br.readLine());
+            int[] arr = new int[n];
+            String[] inputLine = br.readLine().split(" ");
+            for (int i = 0; i < n; i++) {
+                arr[i] = Integer.parseInt(inputLine[i]);
+            }
+
+            System.out.println(new Solution().maxProduct(arr, n));
+        }
+    }
+}
+
+// } Driver Code Ends
+
+
+class Solution {
+    // Function to find maximum product subarray
+    /*
+    long maxProduct(int[] arr, int n) {
+        
+        int maxprod=0;
+        for(int i=0;i<arr.length;i++)
+        {
+            int prod=1;
+            for(int j=i;j<n;j++)
+            {
+            prod*=arr[j];
+           // prod=Math.abs(prod);
+            maxprod=Math.max(maxprod,prod);
+            }
+        }
+        return Math.abs(maxprod);
+    }
+    */
+    /*
+    long maxProduct(int[] arr, int n) {
+       int maxprod=Integer.MIN_VALUE;
+       int prefix=1;
+       int suffix=1;
+       for(int i=0;i<n;i++)
+       {
+           if(prefix==0)prefix=1;
+           if(suffix==0)suffix=1;
+           prefix*=arr[i];
+           suffix*=arr[n-i-1];
+           maxprod=Math.max(maxprod,Math.max(suffix,prefix));
+           
+           
+       }
+       return maxprod;*/
+       
+       //Using Kadane Algorithm
+       long maxProduct(int[] arr, int n) {
+    if (n == 0) return 0;
+
+    long maxprod = arr[0];
+    long currMax = arr[0];
+    long currMin = arr[0];
+
+    for (int i = 1; i < n; i++) {
+        if (arr[i] < 0) {
+            long temp = currMax;
+            currMax = currMin;
+            currMin = temp;
+        }
+
+        currMax = Math.max(arr[i], currMax * arr[i]);
+        currMin = Math.min(arr[i], currMin * arr[i]);
+
+        maxprod = Math.max(maxprod, currMax);
+    }
+
+    return maxprod;
+}
+
+}
