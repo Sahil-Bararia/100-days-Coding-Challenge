@@ -1,0 +1,146 @@
+//{ Driver Code Starts
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class gfg
+{
+    public static void main(String args[])throws IOException
+    {
+        //reading input using BufferedReader class
+        BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
+        
+        //reading total testcases
+        int t = Integer.parseInt(read.readLine());
+        
+        while(t-- > 0)
+        {
+            //reading number of elements and weight
+            int n = Integer.parseInt(read.readLine());
+            int w = Integer.parseInt(read.readLine());
+            
+            int val[] = new int[n];
+            int wt[] = new int[n];
+            
+            String st[] = read.readLine().trim().split("\\s+");
+            
+            //inserting the values
+            for(int i = 0; i < n; i++)
+              val[i] = Integer.parseInt(st[i]);
+             
+            String s[] = read.readLine().trim().split("\\s+"); 
+            
+            //inserting the weigths
+            for(int i = 0; i < n; i++)
+              wt[i] = Integer.parseInt(s[i]);
+              
+            //calling method knapSack() of class Knapsack
+            System.out.println(new Solution().knapSack(w, wt, val, n));
+        }
+    }
+}
+
+
+
+
+// } Driver Code Ends
+
+
+class Solution 
+{ 
+    /*Recursion 
+    //Function to return max value that can be put in knapsack of capacity W.
+    static int f(int index,int w,int wt[],int val[])
+    {
+        if(index==0){
+            if(wt[0]<=w)return val[0];
+            else return 0;
+        }
+        
+        int nottake=0+f(index-1,w,wt,val);
+        int take=Integer.MIN_VALUE;
+        if(wt[index]<=w)
+        take=val[index]+f(index-1,w-wt[index],wt,val);
+        return Math.max(nottake,take);
+    }
+    static int knapSack(int W, int wt[], int val[], int n) 
+    { 
+          return f(n-1,W,wt,val);
+    } 
+    */
+    
+     /*Recursion with Memoization no TLE
+    static int f(int index, int w, int wt[], int val[], int dp[][]) {
+        if (index == 0) {
+            if (wt[0] <= w) return val[0];
+            else return 0;
+        }
+        if (dp[index][w] != -1) return dp[index][w];
+        
+        // Do not take the item
+        int notTake = 0 + f(index - 1, w, wt, val, dp);
+        
+        // Take the item (only if it can fit in the remaining capacity)
+        int take = Integer.MIN_VALUE;
+        if (wt[index] <= w)
+            take = val[index] + f(index - 1, w - wt[index], wt, val, dp);
+        
+        return dp[index][w] = Math.max(notTake, take);
+    }
+    
+    static int knapSack(int W, int wt[], int val[], int n) { 
+        int dp[][] = new int[n][W + 1];
+        
+        // Initialize the dp array with -1 to signify uncomputed states
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j <= W; j++) {
+                dp[i][j] = -1;
+            }
+        }
+        
+        return f(n - 1, W, wt, val, dp);
+    }*/
+    /*
+    static int knapSack(int W, int wt[], int val[], int n) { 
+        int dp[][] = new int[n][W + 1];
+        
+        // Initialize the dp array for the base case when index is 0
+        for (int j = 0; j <= W; j++) {
+            if (wt[0] <= j) {
+                dp[0][j] = val[0];
+            } else {
+                dp[0][j] = 0;
+            }
+        }
+        
+        // Fill the dp table using the bottom-up approach
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j <= W; j++) {
+                int notTake = dp[i - 1][j];  // Not taking the current item
+                int take = Integer.MIN_VALUE;
+                if (wt[i] <= j) {
+                    take = val[i] + dp[i - 1][j - wt[i]];  // Taking the current item
+                }
+                dp[i][j] = Math.max(notTake, take);  // Store the maximum value
+            }
+        }
+        
+        // The answer is in the bottom-right corner of the dp table
+        return dp[n - 1][W];
+    }*/
+    // Most Optimal Solution
+ static int knapSack(int W, int wt[], int val[], int n) {
+    int dp[]=new int[W+1];
+    for(int i=0;i<n;i++)
+    {
+        for(int j=W;j>=wt[i];j--)
+        {
+            dp[j] = Math.max(dp[j], val[i] + dp[j - wt[i]]);
+        }
+    }
+    return dp[W];
+}
+}
+    
+
+
