@@ -1,0 +1,85 @@
+//{ Driver Code Starts
+// Initial Template for Java
+
+import java.io.*;
+import java.util.*;
+
+class GfG {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0) {
+            int v = sc.nextInt();
+            int m = sc.nextInt();
+            int coins[] = new int[m];
+            for (int i = 0; i < m; i++) coins[i] = sc.nextInt();
+            Solution ob = new Solution();
+            System.out.println(ob.minCoins(coins, m, v));
+        }
+    }
+}
+// } Driver Code Ends
+
+/* Recursion with memoization
+class Solution {
+
+    public int f(int coins[], int index, int sum,int dp[][]) {
+    
+        // Base Case: if we've considered all coins
+        if (index == 0) {
+            if (sum % coins[0] == 0) return sum / coins[0]; // If sum is divisible by coins[0]
+            else return Integer.MAX_VALUE; // Impossible to form sum
+        }
+        if(dp[index][sum]!=-1)return dp[index][sum];
+        // Option 1: Do not pick the coin
+        int notPick = f(coins, index - 1, sum,dp);
+        
+        // Option 2: Pick the coin (if it's feasible)
+        int pick = 0;
+        if (coins[index] <= sum) {
+            pick = 1 + f(coins, index, sum - coins[index],dp);
+        }
+        
+        return dp[index][sum]=Math.min(pick, notPick);
+    }
+
+    public int minCoins(int coins[], int M, int sum) {
+        int dp[][]=new int[M][sum+1];
+        for(int i=0;i<M;i++)
+        {
+            for (int j=0;j<=sum;j++)
+            {
+                dp[i][j]=-1;
+            }
+        }
+        return f(coins,M-1,sum,dp);
+        
+    }
+}
+*/
+//Most Optimal Solution
+class Solution {
+
+    public int minCoins(int coins[], int M, int sum) {
+        // Initialize the dp array with a large value (infinity)
+        int[] dp = new int[sum + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0; // Base case: 0 amount requires 0 coins
+
+        // Fill the dp table
+        for (int i = 1; i <= sum; i++) {
+            for (int j = 0; j < M; j++) {
+                // If coin[j] can be used to form the amount i
+                if (coins[j] <= i) {
+                    if (dp[i - coins[j]] != Integer.MAX_VALUE) {
+                        dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
+                    }
+                }
+            }
+        }
+
+        // If dp[sum] is still Integer.MAX_VALUE, it means it's not possible to form the sum
+        return dp[sum] == Integer.MAX_VALUE ? -1 : dp[sum];
+    }
+}
+
