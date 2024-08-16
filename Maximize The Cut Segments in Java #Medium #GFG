@@ -1,0 +1,126 @@
+//{ Driver Code Starts
+//Initial Template for Java
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class Driver
+{
+    public static void main(String args[])throws IOException
+    {
+        //reading input using BufferedReader class
+        BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
+        
+        //reading total testcases
+        int t = Integer.parseInt(read.readLine());
+        
+        while(t-- > 0)
+        {
+            //reading length of line segment
+            int n = Integer.parseInt(read.readLine().trim());
+            
+            
+            //reading 3 segment lengths
+            String str[] = read.readLine().trim().split(" ");
+            
+            int x = Integer.parseInt(str[0]);
+            int y = Integer.parseInt(str[1]);
+            int z = Integer.parseInt(str[2]);
+            
+            
+            //calling method maximizeCuts() of class Solution()
+            //and printinting the result
+            System.out.println(new Solution().maximizeCuts(n, x, y, z));
+        }
+    }
+}
+
+// } Driver Code Ends
+
+
+//User function Template for Java
+
+/*
+class Solution
+{
+    //Function to find the maximum number of cuts.
+    public int f(int index,int x,int y,int z)
+    {
+        if(index==0)return 0;
+        if(index<0)return -1;
+        int maxcut=1+Math.max(f(index-x,x,y,z),Math.max(f(index-y,x,y,z),f(index-z,x,y,z)));
+        return maxcut;
+    }
+    public int maximizeCuts(int n, int x, int y, int z)
+    {
+       return f(n,x,y,z);
+    }
+}*/
+/*Recursion with Memoization
+class Solution {
+    // Function to find the maximum number of cuts.
+    public int f(int index, int x, int y, int z, int[] dp) {
+        // Base case: If the length of the rod is zero, no cuts can be made.
+        if (index == 0) return 0;
+        // If the length of the rod is negative, return a large negative value
+        // to indicate this is an invalid scenario.
+        if (index < 0) return -1;
+        
+        // Check if the value is already computed.
+        if (dp[index] != -1) return dp[index];
+        
+        // Recursively find the maximum cuts for each possible cut length.
+        int cutX = f(index - x, x, y, z, dp);
+        int cutY = f(index - y, x, y, z, dp);
+        int cutZ = f(index - z, x, y, z, dp);
+        
+        // Get the maximum cuts from the possible options.
+        int maxCuts = Math.max(cutX, Math.max(cutY, cutZ));
+        
+        // If maxCuts is valid, add 1 to include the current cut.
+        if (maxCuts == -1) {
+            dp[index] = -1;
+        } else {
+            dp[index] = maxCuts + 1;
+        }
+        
+        return dp[index];
+    }
+
+    public int maximizeCuts(int n, int x, int y, int z) {
+        // Initialize the dp array with -1.
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, -1);
+        
+        // Call the recursive function to compute the maximum number of cuts.
+        int result = f(n, x, y, z, dp);
+        
+        // If result is -1, return 0, because no cuts can be made.
+        return result == -1 ? 0 : result;
+    }
+}
+*/
+//Most Optimised space complexity
+class Solution {
+    public int maximizeCuts(int n, int x, int y, int z) {
+        // Create a DP array initialized to Integer.MIN_VALUE (or -1)
+        int[] dp = new int[n + 1];
+        for (int i = 0; i <= n; i++) {
+            dp[i] = Integer.MIN_VALUE;
+        }
+        // Base case: No cuts can be made on a zero-length rod
+        dp[0] = 0;
+        
+        // Fill the DP array
+        for (int i = 1; i <= n; i++) {
+            if (i >= x) dp[i] = Math.max(dp[i], dp[i - x] + 1);
+            if (i >= y) dp[i] = Math.max(dp[i], dp[i - y] + 1);
+            if (i >= z) dp[i] = Math.max(dp[i], dp[i - z] + 1);
+        }
+        
+        // If no valid cuts can be made, return 0
+        return dp[n] < 0 ? 0 : dp[n];
+    }
+}
+
