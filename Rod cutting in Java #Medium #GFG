@@ -1,0 +1,120 @@
+//{ Driver Code Starts
+import java.io.*;
+import java.util.*;
+
+class RodCutting {
+
+    public static void main(String args[])throws IOException {
+        BufferedReader in=new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out=new PrintWriter(System.out);
+        
+        int t = Integer.parseInt(in.readLine().trim());
+        while (t-- > 0) {
+            int n = Integer.parseInt(in.readLine().trim());
+            String s[]=in.readLine().trim().split(" ");
+            int[] arr = new int[n];
+            for (int i = 0; i < n; i++) arr[i] = Integer.parseInt(s[i]);
+
+            Solution ob = new Solution();
+            out.println(ob.cutRod(arr, n));
+        }
+        out.close();
+    }
+}
+
+// } Driver Code Ends
+
+/* Recursion only
+class Solution{
+    // Till index n what is the max price we are making to get rod of length N
+    public int f(int price[],int index,int n)
+    {
+        if(index==0)
+        {
+            return n*price[0];// at index 0 rodlength=1 and to make rodlength n we require n rods and price of each rod is price[0];
+        }
+        int nottake=0+f(price,index-1,n);
+        int take=0;
+        int rodlength=index+1;//0 base indexing so adding 1
+        if(rodlength<=n)
+        take=price[index]+f(price,index,n-rodlength);
+        return Math.max(take,nottake);
+    }
+    public int cutRod(int price[], int n) {
+        return f(price,n-1,n);
+    }
+}
+*/
+/*Recursion with Memoization no TLE
+class Solution{
+    // Till index n what is the max price we are making to get rod of length N
+    public int f(int price[],int index,int n,int dp[][])
+    {
+        if(index==0)
+        {
+            return n*price[0];// at index 0 rodlength=1 and to make rodlength n we require n rods and price of each rod is price[0];
+        }
+        if(dp[index][n]!=-1)return dp[index][n];
+        int nottake=0+f(price,index-1,n,dp);
+        int take=0;
+        int rodlength=index+1;//0 base indexing so adding 1
+        if(rodlength<=n)
+        take=price[index]+f(price,index,n-rodlength,dp);
+        return dp[index][n]= Math.max(take,nottake);
+    }
+    public int cutRod(int price[], int n) {
+        int dp[][]=new int[n][n+1];
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<=n;j++)
+            {
+                dp[i][j]=-1;
+            }
+        }
+        return f(price,n-1,n,dp);
+    }
+}
+*/
+/* With Tabulation but no space optimisation
+class Solution{
+    // Till index n what is the max price we are making to get rod of length N
+    public int cutRod(int price[], int n) {
+        int dp[][]=new int[n][n+1];
+        for (int j = 0; j <= n; j++) {
+            dp[0][j] = j * price[0];  // Maximum value using only the first piece (length 1)
+        }
+        
+        for(int i=1;i<n;i++)
+        {
+            for(int j=0;j<=n;j++)
+            {
+                dp[i][j]=dp[i-1][j];
+                int rodlength=i+1;
+                if(rodlength<=j)
+                dp[i][j]=Math.max(dp[i][j],price[i]+dp[i][j-rodlength]);
+            }
+        }
+        return dp[n-1][n];
+        
+    }
+}*/
+//Most optimised code
+class Solution {
+    public int cutRod(int price[], int n) {
+        int dp[] = new int[n+1];
+        
+        // Initialize dp array
+        for (int i = 0; i <= n; i++) {
+            dp[i] = i * price[0];  // Initialize for using only the first piece (length 1)
+        }
+        
+        // Fill dp array using the dynamic programming approach
+        for (int i = 1; i < n; i++) {  // Consider pieces from length 2 to n
+            for (int j = i+1; j <= n; j++) {  // Consider rod lengths from i+1 to n
+                dp[j] = Math.max(dp[j], price[i] + dp[j - (i + 1)]);
+            }
+        }
+        
+        return dp[n];  // Maximum value for rod length n
+    }
+}
