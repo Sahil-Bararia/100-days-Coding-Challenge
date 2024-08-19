@@ -1,0 +1,119 @@
+//{ Driver Code Starts
+//Initial Template for Java
+
+/*package whatever //do not write package name here */
+
+import java.io.*;
+import java.util.*;
+class GFG {
+	public static void main (String[] args) {
+	    
+	    //taking input using Scanner class
+		Scanner sc=new Scanner(System.in);
+		
+		//taking total testcases
+		int t=sc.nextInt();
+		
+		sc.nextLine();
+		while(t-->0)
+		{
+		   //taking String X and Y
+		   String S[]=sc.nextLine().split(" ");
+		   String X=S[0];
+		   String Y=S[1];
+		   
+		   //calling function shortestCommonSupersequence()
+		   System.out.println(new Solution().shortestCommonSupersequence(X, Y, X.length(), Y.length()));
+		}
+	}
+
+
+
+
+       
+}
+// } Driver Code Ends
+
+
+//User function Template for Java
+/*Recursion Only
+class Solution
+{
+    //Function to find length of shortest common supersequence of two strings.
+    public static int f(String s1,String s2,int i,int j)
+    {
+        if(i==0) return j;
+        if(j==0) return i;
+        if(s1.charAt(i-1)==s2.charAt(j-1))
+        return 1+f(s1,s2,i-1,j-1);
+        else
+        return 1+Math.min(f(s1,s2,i-1,j),f(s1,s2,i,j-1));
+    }
+    public static int shortestCommonSupersequence(String X,String Y,int m,int n)
+    {
+        return f(X,Y,m,n);
+    }
+}*/
+//Recursion With Tabulation
+class Solution {
+    public static int shortestCommonSupersequence(String X, String Y, int m, int n) {
+        // Create a DP table with dimensions (m+1) x (n+1)
+        int dp[][] = new int[m + 1][n + 1];
+
+        // Initialize the DP table
+        for (int i = 0; i <= m; i++) {
+            for (int j = 0; j <= n; j++) {
+                if (i == 0) {
+                    dp[i][j] = j; // If X is empty, the SCS is Y[0..j]
+                } else if (j == 0) {
+                    dp[i][j] = i; // If Y is empty, the SCS is X[0..i]
+                } else if (X.charAt(i - 1) == Y.charAt(j - 1)) {
+                    dp[i][j] = 1 + dp[i - 1][j - 1]; // Characters match, move diagonally
+                } else {
+                    dp[i][j] = 1 + Math.min(dp[i - 1][j], dp[i][j - 1]); // Take the minimum of excluding one char from X or Y
+                }
+            }
+        }
+
+        // The length of the shortest common supersequence is in dp[m][n]
+        return dp[m][n];
+    }
+}
+/* Most Optimised
+class Solution {
+    public static int shortestCommonSupersequence(String X, String Y, int m, int n) {
+        // Create a 1D DP array
+        int[] dp = new int[n + 1];
+
+        // Initialize the DP array for the case where the first string is empty
+        for (int j = 0; j <= n; j++) {
+            dp[j] = j;
+        }
+
+        // Iterate through each character of X
+        for (int i = 1; i <= m; i++) {
+            // Store the value of dp[j-1] from the previous row (previous iteration)
+            int prev = dp[0];
+            // Initialize dp[0] for the current row (i.e., when Y is empty)
+            dp[0] = i;
+
+            for (int j = 1; j <= n; j++) {
+                // Temporarily store the current value of dp[j] before updating it
+                int temp = dp[j];
+
+                if (X.charAt(i - 1) == Y.charAt(j - 1)) {
+                    dp[j] = 1 + prev;  // Take the diagonal value if characters match
+                } else {
+                    dp[j] = 1 + Math.min(dp[j], dp[j - 1]);  // Take the minimum of the left or top cell
+                }
+
+                // Update prev to the value that was just in dp[j]
+                prev = temp;
+            }
+        }
+
+        // The last element in the dp array contains the length of the SCS
+        return dp[n];
+    }
+}
+*/
