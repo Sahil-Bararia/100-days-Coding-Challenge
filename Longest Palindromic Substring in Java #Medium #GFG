@@ -1,0 +1,63 @@
+//{ Driver Code Starts
+//Initial Template for Java
+
+import java.io.*;
+import java.util.*;
+
+class GFG
+{
+    public static void main(String args[])throws IOException
+    {
+        BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(read.readLine());
+        while(t-- > 0)
+        {
+            
+            String S = read.readLine().trim();
+            Solution ob = new Solution();
+            System.out.println(ob.longestPalindrome(S));
+        }
+    }
+}
+// } Driver Code Ends
+
+
+//User function Template for Java
+
+class Solution {
+    int maxLength = 0;
+    String longestPalin = "";
+
+    void f(int left, int right, String s) {
+        // Base case: If the indices are out of bounds or the characters don't match
+        if (left < 0 || right >= s.length() || s.charAt(left) != s.charAt(right)) {
+            return;
+        }
+
+        // Expand around the center
+        // If this substring is a palindrome and is longer than the previously found one, update it
+        if (right - left + 1 > maxLength) {
+            maxLength = right - left + 1;
+            longestPalin = s.substring(left, right + 1);
+        }
+
+        // Expand in both directions
+        f(left - 1, right + 1, s);
+    }
+
+    String longestPalindrome(String s) {
+        int n = s.length();
+        if (n == 0) return "";
+
+        // Check every possible center for the palindrome
+        for (int i = 0; i < n; i++) {
+            // Odd length palindromes
+            f(i, i, s);
+
+            // Even length palindromes
+            f(i, i + 1, s);
+        }
+
+        return longestPalin;
+    }
+}
