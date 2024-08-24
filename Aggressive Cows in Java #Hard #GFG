@@ -1,0 +1,78 @@
+//{ Driver Code Starts
+// Initial Template for Java
+
+import java.io.*;
+import java.util.*;
+
+class GFG {
+    public static void main(String[] args) throws IOException {
+        Scanner sc = new Scanner(System.in);
+        int t;
+        t = sc.nextInt();
+        while (t-- > 0) {
+
+            int n;
+            n = sc.nextInt();
+
+            int k;
+            k = sc.nextInt();
+
+            int[] v = new int[n];
+            for (int i = 0; i < n; i++) v[i] = sc.nextInt();
+
+            Solution obj = new Solution();
+            int res = obj.solve(n, k, v);
+
+            System.out.println(res);
+        }
+    }
+}
+
+// } Driver Code Ends
+
+
+// User function Template for Java
+class Solution {
+
+    // Function to check if we can place all 'k' cows in the stalls with at least 'mid' distance apart
+    public static boolean canweplacethecows(int[] stalls, int mid, int k) {
+        int cows = 1; // Place the first cow in the first stall
+        int last = stalls[0]; // Track the position of the last placed cow
+        
+        // Iterate through the rest of the stalls
+        for (int i = 1; i < stalls.length; i++) {
+            // Check if the current stall is at least 'mid' distance away from the last placed cow
+            if (stalls[i] - last >= mid) {
+                cows++; // Place another cow
+                last = stalls[i]; // Update the last placed cow's position
+            }
+        }
+        
+        // Return true if all cows have been placed with at least 'mid' distance apart
+        return cows >= k;
+    }
+
+    // Function to find the largest minimum distance possible to place 'k' cows in 'n' stalls
+    public static int solve(int n, int k, int[] stalls) {
+        Arrays.sort(stalls); // Sort the stalls in non-decreasing order
+        
+        int start = 1; // Minimum possible distance between cows
+        int end = stalls[n - 1] - stalls[0]; // Maximum possible distance between cows
+        int result = 0; // Variable to store the result
+        
+        // Perform binary search to find the optimal solution
+        while (start <= end) {
+            int mid = start + (end - start) / 2; // Calculate the middle point
+            
+            // Check if it's possible to place the cows with at least 'mid' distance
+            if (canweplacethecows(stalls, mid, k)) {
+                result = mid; // Update result as this is a valid distance
+                start = mid + 1; // Try for a larger minimum distance
+            } else {
+                end = mid - 1; // If not possible, reduce the search space by moving the end
+            }
+        }
+        
+        return result; // Return the largest minimum distance found
+    }
+}
