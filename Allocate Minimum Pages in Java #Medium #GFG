@@ -1,0 +1,82 @@
+//{ Driver Code Starts
+// Initial Template for Java
+
+/*package whatever //do not write package name here */
+
+import java.io.*;
+import java.util.*;
+
+class GFG {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int t = sc.nextInt();
+
+        while (t-- > 0) {
+            int n = sc.nextInt();
+            int a[] = new int[n];
+
+            for (int i = 0; i < n; i++) {
+                a[i] = sc.nextInt();
+            }
+            int m = sc.nextInt();
+            Solution ob = new Solution();
+            System.out.println(ob.findPages(n, a, m));
+        }
+    }
+}
+// } Driver Code Ends
+
+
+// User function Template for Java
+
+class Solution {
+    
+    // Function to count the number of students required if each student can be allocated at most 'pages' pages.
+    public static long countstudent(int arr[], long pages) {
+        long student = 1;
+        long page = 0;
+        
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] + page <= pages) { // Adjust condition to <=
+                page += arr[i];
+            } else {
+                student++;
+                page = arr[i];
+            }
+        }
+        return student;
+    }
+
+    // Function to find the minimum number of pages.
+    public static long findPages(int n, int[] arr, int m) {
+        if(m>n)return -1;
+        long totalpages = 0;
+        long maxpages = 0;
+
+        // Calculate total number of pages and find the maximum pages in a single book.
+        for (int i = 0; i < n; i++) {
+            totalpages += arr[i];
+            maxpages = Math.max(maxpages, arr[i]);
+        }
+
+        long start = maxpages; // Minimum possible max pages is the max single book.
+        long end = totalpages; // Maximum possible max pages is the sum of all pages.
+        //long result = end;
+
+        // Binary search to find the minimum feasible maximum number of pages.
+        while (start <= end) {
+            long mid = start + (end - start) / 2;
+            long countstud = countstudent(arr, mid);
+
+            if (countstud <= m) {
+                //result = mid; // Update result to the best known feasible solution.
+                end = mid - 1; // Try for a smaller max pages value.
+            } else {
+                start = mid + 1; // Increase the max pages value.
+            }
+        }
+
+        return start;
+    }
+}
