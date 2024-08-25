@@ -1,0 +1,86 @@
+//{ Driver Code Starts
+import java.io.*;
+import java.lang.*;
+import java.util.*;
+
+class Main {
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(br.readLine());
+        for (int g = 0; g < t; g++) {
+            String[] str = (br.readLine()).trim().split(" ");
+            int x[] = new int[str.length];
+            for (int i = 0; i < str.length; i++) x[i] = Integer.parseInt(str[i]);
+            str = (br.readLine()).trim().split(" ");
+            int[] y = new int[str.length];
+            for (int i = 0; i < str.length; i++) {
+                y[i] = Integer.parseInt(str[i]);
+            }
+            System.out.println(new Solution().countPairs(x, y, x.length, y.length));
+        }
+    }
+}
+
+// } Driver Code Ends
+
+
+//Back-end complete function Template for Java
+
+
+
+class Solution {
+    // Helper function to count number of elements in y[] greater than a given x using binary search
+    private int countGreater(int x, int y[], int n) {
+        int low = 0, high = n - 1;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (y[mid] > x) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return n - low; // Number of elements greater than x
+    }
+
+    public long countPairs(int x[], int y[], int M, int N) {
+        // Sort the array y[] for binary search
+        Arrays.sort(y);
+
+        // Frequency array for y[]
+        int freq[] = new int[5];
+        for (int i = 0; i < N; i++) {
+            if (y[i] < 5) {
+                freq[y[i]]++;
+            }
+        }
+
+        long totalPairs = 0;
+
+        // Traverse through all elements of x[]
+        for (int i = 0; i < M; i++) {
+            if (x[i] == 0) {
+                continue; // x^y is never greater than y^x if x = 0
+            } else if (x[i] == 1) {
+                // Only pairs with y = 0 contribute
+                totalPairs += freq[0];
+            } else {
+                int count = countGreater(x[i], y, N);
+                totalPairs += count;
+
+                // Special cases
+                if (x[i] == 2) {
+                    totalPairs -= (freq[3] + freq[4]); // Exclude cases where y = 3 or 4
+                } else if (x[i] == 3) {
+                    totalPairs += freq[2]; // Include cases where y = 2
+                }
+
+                // Add pairs where y = 0 or y = 1
+                totalPairs += (freq[0] + freq[1]);
+            }
+        }
+
+        return totalPairs;
+    }
+}
