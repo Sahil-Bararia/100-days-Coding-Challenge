@@ -1,0 +1,141 @@
+//{ Driver Code Starts
+//initial code
+import java.util.*;
+import java.lang.*;
+class InterLeaveString
+{
+    public static void main(String[] args)
+    {
+        Scanner sc=new Scanner(System.in);
+        int t=sc.nextInt();
+        while(t>0)
+        {
+            String a =sc.next();
+            String b = sc.next();
+            String c = sc.next();
+            Solution g=new Solution();
+        
+            System.out.println(g.isInterLeave(a,b,c)==true?1:0);
+            t--;
+        }
+    }
+}
+
+
+// } Driver Code Ends
+
+
+/*you are required to complete this method */
+    /* Recursion Only
+    class Solution {
+    public boolean f(String s1, String s2, String c, int index1, int index2, int index3) {
+        // Base case: If all strings are fully traversed
+        if (index1 == -1 && index2 == -1 && index3 == -1) {
+            return true;
+        }
+
+        boolean take = false;
+
+        // Check if we can take a character from s1
+        if (index1 >= 0 && s1.charAt(index1) == c.charAt(index3)) {
+            take = f(s1, s2, c, index1 - 1, index2, index3 - 1);
+        }
+
+        // If not already taken, check if we can take a character from s2
+        if (!take && index2 >= 0 && s2.charAt(index2) == c.charAt(index3)) {
+            take = f(s1, s2, c, index1, index2 - 1, index3 - 1);
+        }
+
+        return take;
+    }
+
+    public boolean isInterLeave(String a, String b, String c) {
+        // If the lengths of s1 and s2 don't add up to the length of c, return false
+        if (a.length() + b.length() != c.length()) {
+            return false;
+        }
+        return f(a, b, c, a.length() - 1, b.length() - 1, c.length() - 1);
+    }
+}
+
+    */
+    /*Recursion with Memoization
+    class Solution {
+    public boolean f(String s1, String s2, String c, int index1, int index2, int index3, Boolean[][] dp) {
+        // Base case: If all strings are fully traversed
+        if (index1 == 0 && index2 == 0 && index3 == 0) {
+            return true;
+        }
+
+        // Check the memoized result
+        if (dp[index1][index2] != null) {
+            return dp[index1][index2];
+        }
+
+        boolean take = false;
+
+        // Check if we can take a character from s1
+        if (index1 > 0 && s1.charAt(index1 - 1) == c.charAt(index3 - 1)) {
+            take = f(s1, s2, c, index1 - 1, index2, index3 - 1, dp);
+        }
+
+        // If not already taken, check if we can take a character from s2
+        if (!take && index2 > 0 && s2.charAt(index2 - 1) == c.charAt(index3 - 1)) {
+            take = f(s1, s2, c, index1, index2 - 1, index3 - 1, dp);
+        }
+
+        // Memoize the result
+        dp[index1][index2] = take;
+
+        return take;
+    }
+
+    public boolean isInterLeave(String a, String b, String c) {
+        // If the lengths of s1 and s2 don't add up to the length of c, return false
+        if (a.length() + b.length() != c.length()) {
+            return false;
+        }
+
+        // Initialize a memoization table
+        Boolean[][] dp = new Boolean[a.length() + 1][b.length() + 1];
+
+        // Call the recursive function with memoization
+        return f(a, b, c, a.length(), b.length(), c.length(), dp);
+    }
+}
+*/
+class Solution {
+    public boolean isInterLeave(String a, String b, String c) {
+        int n = a.length();
+        int m = b.length();
+        int o = c.length();
+
+        // If lengths of a and b don't add up to the length of c, return false
+        if (n + m != o) {
+            return false;
+        }
+
+        // Create a DP table
+        boolean[][] dp = new boolean[n + 1][m + 1];
+
+        // Initialize the base case: dp[0][0] is true because an empty string is a valid interleave of two empty strings
+        dp[0][0] = true;
+
+        // Fill the DP table
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= m; j++) {
+                // Check if the current character of `a` matches the corresponding character in `c`
+                if (i > 0 && a.charAt(i - 1) == c.charAt(i + j - 1)) {
+                    dp[i][j] = dp[i][j] || dp[i - 1][j];
+                }
+                // Check if the current character of `b` matches the corresponding character in `c`
+                if (j > 0 && b.charAt(j - 1) == c.charAt(i + j - 1)) {
+                    dp[i][j] = dp[i][j] || dp[i][j - 1];
+                }
+            }
+        }
+
+        // The answer is whether the whole strings `a` and `b` can form `c`
+        return dp[n][m];
+    }
+}
