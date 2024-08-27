@@ -1,0 +1,82 @@
+//{ Driver Code Starts
+//Initial Template for Java
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class GFG
+{
+    public static void main(String args[])throws IOException
+    {
+        BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(read.readLine());
+        
+        while(t-- > 0)
+        {
+            String str[] = read.readLine().trim().split(" ");
+            int n = Integer.parseInt(str[0]);
+            
+            int arr[] = new int[n];
+            int dep[] = new int[n];
+            
+            str = read.readLine().trim().split(" ");
+            for(int i = 0; i < n; i++)
+              arr[i] = Integer.parseInt(str[i]);
+            str = read.readLine().trim().split(" ");
+            for(int i = 0; i < n; i++)
+                dep[i] = Integer.parseInt(str[i]);
+                
+            System.out.println(new Solution().findPlatform(arr, dep, n));
+        }
+    }
+    
+    
+}
+
+
+
+// } Driver Code Ends
+
+
+//User function Template for Java
+
+import java.util.Arrays;
+
+class Solution
+{
+    // Function to find the minimum number of platforms required at the
+    // railway station such that no train waits.
+    static int findPlatform(int arr[], int dep[], int n)
+    {
+        // Sort both arrival and departure times.
+        Arrays.sort(arr);
+        Arrays.sort(dep);
+
+        int a = 0;  // Pointer for arrival times
+        int d = 0;  // Pointer for departure times
+        int maxcount = 0;  // Maximum number of platforms required
+        int c = 0;  // Current number of platforms needed
+
+        // Traverse both arrays.
+        while (a < n && d < n)
+        {
+            // If a train arrives before or exactly when another departs,
+            // increase the platform count.
+            if (arr[a] <= dep[d])
+            {
+                c++;
+                a++;
+                maxcount = Math.max(maxcount, c);
+            }
+            // If a train departs before another arrives, decrease the platform count.
+            else
+            {
+                c--;
+                d++;
+            }
+        }
+
+        return maxcount;
+    }
+}
