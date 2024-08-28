@@ -1,0 +1,33 @@
+import java.util.*;
+
+class Solution {
+    // Function to sort the array according to the frequency of elements.
+    public ArrayList<Integer> sortByFreq(int arr[]) {
+        // Step 1: Count frequencies of each element using a HashMap.
+        HashMap<Integer, Integer> freqMap = new HashMap<>();
+        for (int num : arr) {
+            freqMap.put(num, freqMap.getOrDefault(num, 0) + 1);
+        }
+
+        // Step 2: Convert the elements into a list for sorting.
+        ArrayList<Integer> result = new ArrayList<>();
+        for (int num : arr) {
+            result.add(num);
+        }
+
+        // Step 3: Sort the list by frequency (and by element if frequencies are equal).
+        Collections.sort(result, (a, b) -> {
+            int freqA = freqMap.get(a);
+            int freqB = freqMap.get(b);
+            
+            // If frequencies are different, sort by frequency.
+            if (freqA != freqB) {
+                return freqB - freqA; // Sort in descending order of frequency.
+            } else {
+                return a - b; // If frequencies are the same, sort by element value in ascending order.
+            }
+        });
+
+        return result;
+    }
+}
