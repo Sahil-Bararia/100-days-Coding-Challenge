@@ -1,0 +1,103 @@
+//{ Driver Code Starts
+// Initial Template for Java
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t;
+        t = Integer.parseInt(br.readLine());
+        while (t-- > 0) {
+            String line = br.readLine();
+            String[] tokens = line.split(" ");
+
+            // Create an ArrayList to store the integers
+            ArrayList<Integer> array = new ArrayList<>();
+
+            // Parse the tokens into integers and add to the array
+            for (String token : tokens) {
+                array.add(Integer.parseInt(token));
+            }
+
+            int[] arr = new int[array.size()];
+            int idx = 0;
+            for (int i : array) arr[idx++] = i;
+
+            System.out.println(new Solution().minJumps(arr));
+            // System.out.println("~");
+        }
+    }
+}
+
+// } Driver Code Ends
+
+/*Can be done through Recursion
+class Solution {
+    static int f(int []arr,int index,int jumps,int dp[][])
+    {
+        int minjump=-1;
+        if(index>=arr.length-1)return jumps;
+        if(dp[index][jumps]!=-1)return dp[index][jumps];
+        for(int i=1;i<arr[i];i++)
+        {
+            minjump=Math.min(minjump,f(i+arr[i],jumps+1));
+            
+        }
+        dp[index][jumps]=minjump;
+    }
+    static int minJumps(int[] arr, int n) {
+        int dp[][]=new int[n][n];
+        for(int i=0;i<n;i++)
+        {
+            Arrays.fill(dp[i],-1);
+        }
+        return f(arr,0,1,dp);
+    }
+}
+*/
+//Using Greedy Algo
+class Solution {
+    static int minJumps(int[] arr) {
+        int n = arr.length;
+        
+        // If the array length is 1, we are already at the end.
+        if (n <= 1) {
+            return 0;
+        }
+
+        // If the first element is 0, we can't move anywhere.
+        if (arr[0] == 0) {
+            return -1;
+        }
+
+        // Initialize variables.
+        int jumps = 0;       // The number of jumps taken.
+        int l = 0;           // The start of the current range.
+        int r = 0;           // The end of the current range.
+        int farthest = 0;    // The farthest we can reach from the current range.
+
+        // Loop until the right boundary is before the end of the array.
+        while (r < n - 1) {
+            // Find the farthest we can reach from the current range.
+            for (int i = l; i <= r; i++) {
+                farthest = Math.max(farthest, i + arr[i]);
+            }
+
+            // Update the new range for the next jump.
+            l = r + 1;
+            r = farthest;
+            jumps++;
+
+            // If we can't move further, return -1.
+            if (l > r) {
+                return -1;
+            }
+        }
+
+        return jumps;
+    }
+}
+
