@@ -1,0 +1,67 @@
+// User function Template for Java
+
+class Solution {
+    // We need to check three directions: Upper, lower diagonal, and left for queen
+    public boolean isSafe(int row, int col, char[][] board, int n) {
+        // Check Upper Diagonal for the presence of a queen
+        int temprow = row;
+        int tempcol = col;
+        while (row >= 0 && col >= 0) {
+            if (board[row][col] == 'Q') {
+                return false;
+            }
+            row--;
+            col--;
+        }
+
+        // Check for the left columns
+        row = temprow;
+        col = tempcol;
+        while (col >= 0) {
+            if (board[row][col] == 'Q') {
+                return false;
+            }
+            col--;
+        }
+
+        // Check for the lower diagonal direction
+        row = temprow;
+        col = tempcol;
+        while (row < n && col >= 0) {
+            if (board[row][col] == 'Q') {
+                return false;
+            }
+            row++;
+            col--;
+        }
+
+        return true;
+    }
+
+    public void solve(int col, char[][] board, int n, ArrayList<ArrayList<Integer>> ans, ArrayList<Integer> current) {
+        if (col == n) { // All queens are placed successfully
+            ans.add(new ArrayList<>(current));
+            return;
+        }
+
+        for (int row = 0; row < n; row++) {
+            if (isSafe(row, col, board, n)) {
+                board[row][col] = 'Q';
+                current.add(row + 1);  // Store the column index as 1-based for output
+                solve(col + 1, board, n, ans, current);
+                board[row][col] = '.'; // Backtrack
+                current.remove(current.size() - 1);
+            }
+        }
+    }
+
+    public ArrayList<ArrayList<Integer>> nQueen(int n) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        char[][] board = new char[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(board[i], '.');
+        }
+        solve(0, board, n, ans, new ArrayList<>());
+        return ans;
+    }
+}
