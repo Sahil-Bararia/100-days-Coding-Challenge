@@ -1,0 +1,60 @@
+//{ Driver Code Starts
+//Initial Template for Java
+
+/*package whatever //do not write package name here */
+
+import java.io.*;
+import java.util.*;
+class GFG {
+	public static void main (String[] args) {
+		Scanner sc=new Scanner(System.in);
+		int t=sc.nextInt();
+		sc.nextLine();
+		while(t-->0)
+		{
+		    int n;
+		    n=sc.nextInt();
+		    
+		    long arr[]=new long[n];
+	
+		    
+		    for(int i=0;i<n;i++)
+		    {
+		        arr[i]=sc.nextLong();
+		    }
+            Solution ob = new Solution();
+		    System.out.println(ob.findSubarray(arr,n));
+		}
+		
+	}
+}
+
+// } Driver Code Ends
+
+
+//User function Template for Java
+class Solution {
+    // Function to count subarrays with sum equal to 0.
+    public static long findSubarray(long[] arr, int n) {
+        long count = 0; // To store the total number of subarrays with sum 0
+        long prefixSum = 0; // To store the current prefix sum
+        HashMap<Long, Integer> mp = new HashMap<>(); // To store prefix sums and their frequencies
+
+        mp.put(0L, 1); // Initialize with sum 0 to handle subarrays starting from index 0
+
+        // Iterate through the array
+        for (int i = 0; i < n; i++) {
+            prefixSum += arr[i]; // Update the prefix sum
+
+            // If the prefix sum has been seen before, add its frequency to the count
+            if (mp.containsKey(prefixSum)) {
+                count += mp.get(prefixSum);
+            }
+
+            // Increment the frequency of the current prefix sum in the map
+            mp.put(prefixSum, mp.getOrDefault(prefixSum, 0) + 1);
+        }
+
+        return count; // Return the total count of subarrays with sum 0
+    }
+}
