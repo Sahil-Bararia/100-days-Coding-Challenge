@@ -1,0 +1,49 @@
+//{ Driver Code Starts
+import java.io.*;
+import java.lang.*;
+import java.util.*;
+
+class GFG {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        while (T-- > 0) {
+            int n = Integer.parseInt(br.readLine().trim());
+            Solution ob = new Solution();
+            long ans = ob.nthStair(n);
+            System.out.println(ans);
+        }
+    }
+}
+
+// } Driver Code Ends
+
+/*
+class Solution {
+    public int countWays(int n,int dp[]) {
+    if(dp[n]!=-1)return dp[n];
+    if (n == 0) return 1;  // Base case: Only one way to reach the top without moving.
+    if (n == 1) return 1;  // Base case: Only one way to reach with one 1-step.
+
+    // Recursive case
+    return dp[n]=1 + countWays(n - 2,dp);
+}
+    public int nthStair(int n) {
+        int dp[]=new int[n+1];
+        Arrays.fill(dp,-1);
+        return countWays(n,dp);
+    }
+}
+*/
+class Solution {
+    public int nthStair(int n) {
+        int dp[]=new int[n+1];
+        dp[0]=1;dp[1]=1;
+        for(int i=2;i<=n;i++)
+        {
+            dp[i]=1+dp[i-2];
+        }
+        return dp[n];
+    }
+}
+
