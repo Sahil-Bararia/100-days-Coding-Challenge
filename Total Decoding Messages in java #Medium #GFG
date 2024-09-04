@@ -1,0 +1,83 @@
+//{ Driver Code Starts
+//Initial Template for Java
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class GFG
+{
+    public static void main(String[] args) throws IOException
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out=new PrintWriter(System.out);
+        int T = Integer.parseInt(br.readLine().trim());
+        while(T-->0)
+        {
+            String str = br.readLine().trim();
+            Solution ob = new Solution();
+            int ans = ob.CountWays(str);
+            out.println(ans);
+        }
+        out.close();
+    }
+}
+
+// } Driver Code Ends
+
+
+//User function Template for Java
+/*
+class Solution
+{
+    public int MOD=1000000007;
+    public int f(String s,int index,int dp[])
+    {
+        
+        if(index<0)return 1;
+        if(s.charAt(index)=='0')return 0;
+        if(dp[index]!=-1)return dp[index];
+        int count=0;
+        count=f(s,index-1,dp)%MOD;
+        if(index > 0 && s.charAt(index - 1) != '0' && Integer.parseInt(s.substring(index - 1, index + 1)) <= 26) {
+            count = (count + f(s, index - 2,dp)) % MOD;
+        }
+        return dp[index]=count;
+    }
+    public int CountWays(String str)
+    {
+        int n=str.length();
+        int dp[]=new int[n];
+        Arrays.fill(dp,-1);
+        return f(str,n-1,dp);
+    }
+}
+*/
+class Solution {
+    public int MOD = 1000000007;
+
+    public int CountWays(String str) {
+        int n = str.length();
+        if (n == 0) return 0;  // No ways to decode an empty input string
+
+        int[] dp = new int[n + 1];  // dp[i] represents the number of ways to decode up to the i-th character
+        dp[0] = 1;  // Base case: one way to decode an empty string
+
+        // Initialize dp[1] based on the first character of the string
+        dp[1] = (str.charAt(0) != '0') ? 1 : 0;
+
+        for (int i = 2; i <= n; i++) {
+            // Single-character decoding
+            if (str.charAt(i - 1) != '0') {
+                dp[i] = dp[i - 1] % MOD;
+            }
+
+            // Two-character decoding
+            int twoDigit = Integer.parseInt(str.substring(i - 2, i));  // Extract two digits as an integer
+            if (twoDigit >= 10 && twoDigit <= 26) {
+                dp[i] = (dp[i] + dp[i - 2]) % MOD;
+            }
+        }
+
+        return dp[n];
+    }
+}
