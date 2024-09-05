@@ -1,0 +1,56 @@
+//{ Driver Code Starts
+//Initial Template for Java
+import java.io.*;
+import java.util.*;
+
+class GFG
+{
+    public static void main(String args[])throws IOException
+    {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while(t-- > 0)
+        {
+            
+            int N=sc.nextInt();
+            int K=sc.nextInt();
+            ArrayList<Integer> Arr = new ArrayList<Integer>(N); 
+  
+            // Appending new elements at 
+            // the end of the list 
+            for (int i = 0; i < N; i++) {
+                int x = sc.nextInt();
+                Arr.add(x); 
+            }
+
+            Solution ob = new Solution();
+            System.out.println(ob.maximumSumSubarray(K,Arr,N));
+        }
+    }
+}
+
+// } Driver Code Ends
+
+
+//User function Template for Java
+class Solution {
+    static long maximumSumSubarray(int K, ArrayList<Integer> Arr, int N) {
+        long sum = 0; // Current window sum
+        long maxSum = 0; // Maximum sum of any window of size K
+        
+        // Calculate the sum of the first window of size K
+        for (int i = 0; i < K; i++) {
+            sum += Arr.get(i);
+        }
+        
+        maxSum = sum; // Initialize maxSum with the sum of the first window
+        
+        // Slide the window from start to end of the array
+        for (int i = K; i < N; i++) {
+            sum += Arr.get(i) - Arr.get(i - K); // Slide the window right by adding the next element and removing the first element of the previous window
+            maxSum = Math.max(maxSum, sum); // Update the maximum sum found so far
+        }
+        
+        return maxSum;
+    }
+}
