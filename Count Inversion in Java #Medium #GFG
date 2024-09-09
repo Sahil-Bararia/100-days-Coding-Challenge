@@ -1,0 +1,77 @@
+//{ Driver Code Starts
+// Initial Template for Java
+
+import java.io.*;
+import java.lang.*;
+import java.util.*;
+
+class Sorting {
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        long t = Integer.parseInt(br.readLine());
+        for (int g = 0; g < t; g++) {
+            String[] str = (br.readLine()).trim().split(" ");
+            long arr[] = new long[str.length];
+            for (int i = 0; i < str.length; i++) arr[i] = Integer.parseInt(str[i]);
+            System.out.println(new Solution().inversionCount(arr));
+        }
+    }
+}
+
+// } Driver Code Ends
+
+class Solution {
+   static int c = 0;  // Variable to keep count of inversions
+
+    // Merge Sort function that sorts an array from index l to r
+    static void mergeSort(long arr[], int l, int r) {
+        if (l >= r) return;  // Base condition, single element is already sorted
+        
+        int mid = (l + r) / 2;  // Calculate the middle point
+        mergeSort(arr, l, mid);  // Sort first half
+        mergeSort(arr, mid + 1, r);  // Sort second half
+        merge(arr, l, mid, r);  // Merge the two halves
+    }
+
+    // Function to merge two sorted halves of the array
+   static void merge(long arr[], int l, int m, int r) {
+        int left = l;  // Start of the left sorted half
+        int right = m + 1;  // Start of the right sorted half
+        ArrayList<Long> temp = new ArrayList<>();  // Temporary array to store sorted elements
+        
+        // Merge the two halves into temp array
+        while (left <= m && right <= r) {
+            if (arr[left] <= arr[right]) {
+                temp.add(arr[left]);
+                left++;
+            } else {
+                temp.add(arr[right]);
+                c += (m - left + 1);  // Correct inversion count formula
+                right++;
+            }
+        }
+        
+        // Add remaining elements of left half if any
+        while (left <= m) {
+            temp.add(arr[left]);
+            left++;
+        }
+        
+        // Add remaining elements of right half if any
+        while (right <= r) {
+            temp.add(arr[right]);
+            right++;
+        }
+        
+        // Copy the sorted elements back into original array
+        for (int i = l; i <= r; i++) {
+            arr[i] = temp.get(i - l);
+        }
+    }
+
+    static long inversionCount(long arr[]) {
+        c=0;
+        mergeSort(arr, 0, arr.length - 1);
+        return c;
+    }
+}
