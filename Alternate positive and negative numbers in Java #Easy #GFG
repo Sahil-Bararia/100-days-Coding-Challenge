@@ -1,0 +1,72 @@
+//{ Driver Code Starts
+// Initial Template for Java
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int tc = Integer.parseInt(br.readLine().trim());
+        while (tc-- > 0) {
+            String input = br.readLine();
+            String[] inputArray = input.split("\\s+");
+            ArrayList<Integer> arr = new ArrayList<>();
+
+            for (String s : inputArray) {
+                arr.add(Integer.parseInt(s));
+            }
+
+            new Solution().rearrange(arr);
+            for (int num : arr) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+
+// } Driver Code Ends
+
+
+// User function Template for Java
+
+class Solution {
+    void rearrange(ArrayList<Integer> arr) {
+        ArrayList<Integer> pos = new ArrayList<Integer>();
+        ArrayList<Integer> neg = new ArrayList<Integer>();
+        
+        // Separate positive and negative numbers into two lists
+        for(int x : arr)
+            if(x >= 0)
+                pos.add(x);   // Add positive numbers to 'pos'
+            else
+                neg.add(x);   // Add negative numbers to 'neg'
+                
+        int i = 0, j = 0;  // Pointers for positive (i) and negative (j) lists
+        int ind = 0;       // Index for the main 'arr' array
+        
+        // Loop through the main array and
+
+        //alternate placing positive and negative numbers
+        while(ind < arr.size())
+        {
+            // If there are still elements in the positive list, add the next one
+            if(i < pos.size())
+            {
+                arr.set(ind, pos.get(i));
+                i++;       // Move to the next positive number
+                ind++;     // Move to the next index in the main array
+            }
+            
+            // If there are still elements in the negative list, add the next one
+            if(j < neg.size())
+            {
+                arr.set(ind, neg.get(j));
+                j++;       // Move to the next negative number
+                ind++;     // Move to the next index in the main array
+            }
+        }
+    }
+}
