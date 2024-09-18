@@ -1,0 +1,74 @@
+
+
+class Node {
+    int key, value;
+    Node next, prev;
+
+    Node(int key, int value) {
+        this.key = key;
+        this.value = value;
+        this.next = null;
+        this.prev = null;
+    }
+}
+
+class LRUCache {
+    private final Map<Integer, Node> map; // To store key-node pairs
+    private final int capacity; // Maximum capacity of the cache
+    private Node head, tail; // Pointers for the doubly linked list
+
+    // Constructor for initializing the cache capacity with the given value.
+    LRUCache(int capacity) {
+        this.capacity = capacity;
+        this.map = new HashMap<>();
+        this.head = new Node(0, 0); // Dummy head
+        this.tail = new Node(0, 0); // Dummy tail
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    // Function to remove a node from the doubly linked list.
+    private void removeNode(Node node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
+    // Function to add a node right after the head (most recently used).
+    private void addNode(Node node) {
+        node.next = head.next;
+        node.prev = head;
+        head.next.prev = node;
+        head.next = node;
+    }
+
+    // Function to return value corresponding to the key.
+    public int get(int key) {
+        if (!map.containsKey(key)) {
+            return -1; // Key not found
+        }
+        Node node = map.get(key);
+        removeNode(node); // Remove the node from its current position
+        addNode(node); // Add it right after head
+        return node.value;
+    }
+
+    // Function for storing key-value pair.
+    public void set(int key, int value) {
+        if (map.containsKey(key)) {
+            Node node = map.get(key);
+            node.value = value; // Update the value
+            removeNode(node); // Remove the node
+            addNode(node); // Add it back as the most recently used
+        } else {
+            if (map.size() == capacity) {
+                // Remove the least recently used node
+                Node lru = tail.prev;
+                removeNode(lru);
+                map.remove(lru.key);
+            }
+            Node newNode = new Node(key, value);
+            addNode(newNode); // Add the new node as the most recently used
+            map.put(key, newNode); // Insert it into the map
+        }
+    }
+}
