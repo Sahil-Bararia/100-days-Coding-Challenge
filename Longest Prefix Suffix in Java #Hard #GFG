@@ -1,0 +1,61 @@
+//{ Driver Code Starts
+// Initial Template for Java
+
+import java.io.*;
+import java.util.*;
+
+class GFG {
+    public static void main(String args[]) throws IOException {
+        BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(read.readLine());
+        while (t-- > 0) {
+
+            String s = read.readLine();
+            Solution ob = new Solution();
+            System.out.println(ob.lps(s));
+        }
+    }
+}
+// } Driver Code Ends
+
+
+// User function Template for Java
+
+class Solution {
+    int lps(String str) {
+        int n = str.length();
+        
+        // Create an LPS array of size n initialized to 0.
+        int lps[]=new int[n];
+        Arrays.fill(lps,0);
+        
+        int i = 1;    // Pointer to traverse the string
+        int len = 0;  // Length of the longest prefix that is also a suffix
+        
+        // Start building the LPS array
+        while (i < n) {
+            // Case 1: If characters at i and len match
+            if (str.charAt(i) == str.charAt(len)) {
+                // Increment len and assign it to lps[i]
+                lps[i] = ++len;
+                ++i;
+            }
+            // Case 2: If they don't match
+            else {
+                // If len is greater than 0, backtrack to the previous LPS value
+                if (len > 0) {
+                    len = lps[len - 1];
+                } 
+                // If len is 0, just move forward and set lps[i] to 0
+                else {
+                    lps[i] = 0;
+                    ++i;
+                }
+            }
+        }
+        
+        // The value at lps[n-1] contains the length of the longest prefix
+        // that is also a suffix
+        return lps[n-1];
+    }
+}
