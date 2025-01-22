@@ -1,0 +1,58 @@
+//{ Driver Code Starts
+// Initial Template for Java
+
+import java.util.*;
+
+class Main {
+    public static void main(String args[]) {
+        Scanner scanner = new Scanner(System.in);
+        int t = Integer.parseInt(scanner.nextLine()); // Read the number of test cases
+
+        while (t-- > 0) {
+            // Read the first line and split into integers for array1
+            String[] tokens = scanner.nextLine().split(" ");
+            int[] gas = new int[tokens.length];
+            for (int i = 0; i < tokens.length; i++) {
+                gas[i] = Integer.parseInt(tokens[i]);
+            }
+
+            // Read the second line and split into integers for array2
+            tokens = scanner.nextLine().split(" ");
+            int[] cost = new int[tokens.length];
+            for (int i = 0; i < tokens.length; i++) {
+                cost[i] = Integer.parseInt(tokens[i]);
+            }
+
+            // Solve and print the result
+            int ans = new Solution().startStation(gas, cost);
+            System.out.println(ans);
+            System.out.println("~");
+        }
+
+        scanner.close(); // Close the scanner
+    }
+}
+
+// } Driver Code Ends
+
+
+class Solution {
+    public int startStation(int[] gas, int[] cost) {
+        int totalGas = 0, currentGas = 0, startIndex = 0;
+
+        for (int i = 0; i < gas.length; i++) {
+            totalGas += gas[i] - cost[i];  // Total gas balance
+            currentGas += gas[i] - cost[i]; // Current gas balance
+
+            // If currentGas becomes negative, reset the starting point
+            if (currentGas < 0) {
+                startIndex = i + 1; // Start from the next station
+                currentGas = 0;    // Reset current gas
+            }
+        }
+
+        // If total gas is negative, it's impossible to complete the circuit
+        return totalGas >= 0 ? startIndex : -1;
+    }
+}
+ 
